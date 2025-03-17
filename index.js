@@ -4,7 +4,8 @@ const PORT=process.env.PORT || 3000;
 
 index.use(express.json());
 
-const books = [];
+let books = [];
+  
   
 
 
@@ -27,7 +28,7 @@ index.get('/books', (request, response)=>{
 
 
 index.get('/books/:id', (request, response)=>{
-const book = books.find(b => b.id===request.params.id); //Finds index of book
+const book = books.find(b => b.id===parseInt(request.params.id)); //Finds index of book
 if (!book) {
     return response.status(404).json({ error: 'Book not found' });
 }
@@ -45,18 +46,18 @@ index.post('/books', (request, response)=>{
 
 index.put('/book/:id', (request, response)=>{
     const {title, details} = request.body;
-    const bookIndex = books.findIndex(b=>b.id===request.params.id);
+    const bookIndex = books.findIndex(b=>b.id===parseInt(request.params.id));
 
-    if (bookIndex === -1) {
-        return res.status(404).json({ error: 'Book not found' });
+    if (bookIndex===-1) {
+        return response.status(404).json({ error: 'Book not found' });
     }
 
-    books[booksIndex]={id:request.params.id, title, details};
+    books[booksIndex]={id:parseInt(request.params.id), title, details};
     response.json(books[bookIndex]);
 });
 
 index.delete('/books/:id', (request, response)=>{
-    const bookIndex = books.findIndex(b=>b.id===request.params.id);
+    const bookIndex = books.findIndex(b=>b.id===parseInt(request.params.id));
     if(bookIndex===-1){
         return response.status(404).json({error:'Book not found'});
     }
@@ -66,9 +67,9 @@ index.delete('/books/:id', (request, response)=>{
 
 index.post('/books/:id/details',(request, response)=>{
     const { author, genre, publicationYear } = request.body;
-    const book = books.find(b=>b.id===req.params.id);
+    const book = books.find(b=>b.id===parseInt(request.params.id));
     if (!book) {
-        return res.status(404).json({ error: 'Book not found' });
+        return response.status(404).json({ error: 'Book not found' });
     }
 
     const newDetail = {
@@ -82,13 +83,13 @@ index.post('/books/:id/details',(request, response)=>{
 });
 
 index.delete('/books/:id/details/:detailId' , (request, response)=>{
-    const book = books.find(b=>b.id===request.params.id);
+    const book = books.find(b=>b.id===parseInt(request.params.id));
     if(!book) {
         return response.status(404).json({ error: 'Book not found'});
     }
 
-    const detailIndex = book.details.findIndex(d=>d.id===req.params.detailId);
-    if(detailIndex === -1) {
+    const detailIndex = book.details.findIndex(d=>d.id===parseInt(request.params.detailId));
+    if(detailIndex===-1) {
         return response.status(404).json({ error: 'Detail not found'});
     }
 
